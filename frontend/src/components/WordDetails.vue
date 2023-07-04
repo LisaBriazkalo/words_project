@@ -3,6 +3,10 @@
       <h2>{{currantlyWord.word}}</h2>
       <h3>{{currantlyWord.translate}}</h3>
       <h4>{{currantlyWord.example}}</h4>
+      <router-link
+            :to="{name: 'wordEdit', params: {categoryName: this.categoryName}}"
+            ><button>update</button></router-link>
+      <button @click="deleteWord()">delete</button>
     </div>
   </template>
   
@@ -24,6 +28,19 @@
       }
     },
     methods:{
+      deleteWord() {
+        fetch(`http://localhost:8000/${this.categoryName}/${this.id}`,{
+              method:'DELETE',
+              headers: {"Content-Type":"application/json"}
+          })
+          .then(()=>{
+                this.$router.push({
+                    name:'dictionary',
+                    params: { name: this.categoryName }
+                })
+            })
+          .catch(error=>{console.log(error)})
+      },
       getWordData() {
           fetch(`http://localhost:8000/${this.categoryName}/${this.id}`,{
               method:'GET',

@@ -2,6 +2,8 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Home from './components/Home.vue'
 import Dictionary from './components/Dictionary.vue'
 import WordDetails from './components/WordDetails.vue'
+import CreateWord from './components/CreateWord.vue'
+import WordEdit from './components/WordEdit.vue'
 
 const routes=[
     {
@@ -20,6 +22,18 @@ const routes=[
         path: '/:categoryName/:id/wordDetails',
         name: 'wordDetails',
         component: WordDetails,
+        props: true
+    },
+    {
+        path: '/:categoryName/:id/wordEdit',
+        name: 'wordEdit',
+        component: WordEdit,
+        props: true
+    },
+    {
+        path: '/:categoryName/create',
+        name: 'CreateWord',
+        component: CreateWord,
         props: true
     }
 ]
