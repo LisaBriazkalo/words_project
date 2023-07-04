@@ -2,11 +2,19 @@ from fastapi import FastAPI
 from pymongo import MongoClient
 from bson import ObjectId
 from model import *
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app=FastAPI()
 client = MongoClient("mongodb://localhost:27017/")
 mydb=client.test
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Встановлюємо дозвіл на всі джерела запитів (змініть на список URL-адрес, якщо потрібно)
+    allow_methods=["*"],  # Встановлюємо дозвіл на всі HTTP методи
+    allow_headers=["*"],  # Встановлюємо дозвіл на всі заголовки
+)
 
 @app.get("/")
 async def get():
