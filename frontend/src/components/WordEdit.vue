@@ -1,26 +1,36 @@
 <template>
     <div>
-    <h1>Edit</h1>
+        <div class="header">
+        <router-link class="backB"
+          :to="{name: 'dictionary', params: {name:categoryName}}"
+              ><button >=</button></router-link>
+        <h1>Edit the word</h1>
+      </div>
+      <div id="newword-form">
     <form @submit.prevent="editWord">
         <input
         type="text"
         placeholder="enter your word"
         v-model="word"
+        class="long-input"
         />
         <br/>
         <input
         type="text"
         placeholder="enter translate"
         v-model="translate"
+        class="long-input"
         /><br/>
         <textarea rows="10"
         type="text"
         placeholder="enter example"
         v-model="example"
+        class="long-input"
         ></textarea>
         <br/>
         <button>ok</button>
     </form>
+    </div>
     <div v-if="error">
         <strong>error</strong>
       </div>

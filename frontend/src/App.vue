@@ -13,9 +13,5 @@
 </script>
 
 <style>
-#app{
-  display: block;
-  margin-left: 5%;
-  margin-right: 5%;
-}
+
 </style>

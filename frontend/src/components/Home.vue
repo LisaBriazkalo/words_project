@@ -2,31 +2,38 @@
     <div>
     <h1>Home</h1>
     <div v-for="category in categories" :key="category">
-        <h3>
-            <router-link id="category-label"
-            :to="{name: 'dictionary', params: {name:category}}"
-            >{{category}}</router-link>
-            <div id="category-rename">
-                <form @submit.prevent="editName">
-                <input  placeholder="enter new name" v-model="newName" />
-                <button type="submit">ok</button>
-                <button @click="closeEditForm">x</button>
-                </form>
-                <div v-if="error">
-                <strong>error</strong>
+        <div class="category-plate">
+            <h3>
+                <router-link 
+                :to="{name: 'dictionary', params: {name:category}}"
+                >{{category}}</router-link>
+                <div :id="'category-rename-' + category" class="category-rename">
+                    <form @submit.prevent="editName">
+                    <input  
+                    placeholder="enter new name" 
+                    v-model="newName" 
+                    class="short-input"/>
+                    <button class="button-delete" type="submit">ok</button>
+                    </form>
+                    <div v-if="error">
+                    <strong>error</strong>
+                    </div>
                 </div>
-            </div>
-                <button id="category-rename-button" @click="openEditForm(category)">rename</button>
-            <button id="category-delete-button" @click="deleteCategory(category)">delete</button>
-        </h3>
+            </h3>
+            <p><button  @click="openEditForm(category)">rename</button></p>
+            <p><button @click="deleteCategory(category)">x</button></p>
+        </div>
         <hr/>
     </div>
+    <div id="add-new-category">
     <input
         type="text"
         placeholder="new-category"
         v-model="newCategory"
+        class="short-input"
         />
-    <button @click="createCategory(this.newCategory)">add</button>
+    <button class="button-delete" @click="createCategory(this.newCategory)">+</button>
+    </div>
     </div>
 </template>
   
@@ -60,24 +67,9 @@ export default{
         openEditForm(oldname) {
             this.newName=oldname
             this.oldName=oldname
-            var element = document.getElementById("category-rename");
+            var element = document.getElementById('category-rename-' + this.oldName);
             element.style.display = "flex";
-            element = document.getElementById("category-label");
-            element.style.display = "none";
-            element = document.getElementById("category-rename-button");
-            element.style.display = "none";
-            element = document.getElementById("category-delete-button");
-            element.style.display = "none";
-        },
-        closeEditForm() {
-            var element = document.getElementById("category-rename");
-            element.style.display = "none";
-            element = document.getElementById("category-label");
-            element.style.display = "inline";
-            element = document.getElementById("category-rename-button");
-            element.style.display = "inline";
-            element = document.getElementById("category-delete-button");
-            element.style.display = "inline";
+            
         },
         deleteCategory(category) {
             fetch(`http://localhost:8000/${category}/`,{
@@ -124,7 +116,26 @@ export default{
 </script>
   
 <style>
-#category-rename{
+.category-rename{
     display: none;
+}
+.category-plate{
+  display: grid;
+  grid-template-columns: 1fr 70px 30px;
+  align-items: center;
+}
+.short-input{
+  
+  padding: 5px;
+  background-color: #f8f8f8;
+}
+#add-new-category{
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.button-delete{
+    padding: 5px;
+    margin: 5px;
 }
 </style>

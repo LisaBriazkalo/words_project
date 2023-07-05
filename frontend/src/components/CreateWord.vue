@@ -1,25 +1,34 @@
 <template>
     <div>
-      <form @submit.prevent="insertWord">
-        <input
-        type="text"
-        placeholder="enter your word"
-        v-model="word"
-        />
-        <br/>
-        <input
-        type="text"
-        placeholder="enter translate"
-        v-model="translate"
-        /><br/>
-        <textarea rows="10"
-        type="text"
-        placeholder="enter example"
-        v-model="example"
-        ></textarea>
-        <br/>
-        <button>ok</button>
-      </form>
+      <div class="header">
+        <router-link class="backB"
+          :to="{name: 'dictionary', params: {name:categoryName}}"
+              ><button >=</button></router-link>
+        <h1>Create a new word</h1>
+      </div>
+      <div id="newword-form">
+        <form @submit.prevent="insertWord">
+          <input 
+          type="text"
+          placeholder="enter your word"
+          v-model="word"
+          class="long-input"
+          />
+          <input
+          type="text"
+          placeholder="enter translate"
+          v-model="translate"
+          class="long-input"
+          />
+          <textarea rows="10"
+          type="text"
+          placeholder="enter example"
+          v-model="example"
+          class="long-input"
+          ></textarea>
+          <button>ok</button>
+        </form>
+      </div>
       <div v-if="error">
         <strong>error</strong>
       </div>
@@ -67,4 +76,22 @@
   </script>
   
   <style>
+  #newword-form{
+    margin: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+  .long-input {
+  width: 100%; 
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 10px;
+  background-color: #f8f8f8;
+  
+}
+.short-input:focus, .long-input:focus {
+  background-color: lightskyblue;
+
+}
+
   </style>

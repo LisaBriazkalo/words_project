@@ -1,18 +1,25 @@
 <template>
     <div>
-      <h1>Words in the {{this.name}} category</h1>
-      <router-link
-            :to="{name: 'CreateWord', params: {categoryName: this.name}}"
-            ><button>add</button></router-link>
-      <div v-for="word in dictionary" :key="word.id">
-        <router-link
-            :to="{name: 'wordDetails', params: {categoryName: this.name, id:word.id}}"
-            >
+      <div class="header">
+        <router-link class="backB"
+              :to="{name: 'home'}"
+              ><button >=</button></router-link>
+        <h1>Words in the {{this.name}} category</h1>
+      </div>
+      <div v-for="word in dictionary" :key="word.id" >
+        <div class="word-translate">
+          <router-link
+              :to="{name: 'wordDetails', params: {categoryName: this.name, id:word.id}}"
+              >
           <h3>{{word.word}}</h3></router-link>
-        <h4>{{word.translate}}</h4>
-        <button @click="deleteWord(word.id)">delete</button>
+          <h4>{{word.translate}}</h4>
+          <p><button @click="deleteWord(word.id)" >x</button></p>
+        </div>
         <hr/>
       </div>
+      <router-link class="addB"
+            :to="{name: 'CreateWord', params: {categoryName: this.name}}"
+            ><button >+</button></router-link>
     </div>
   </template>
   
@@ -58,5 +65,23 @@
   }
   </script>
   
-  <style>
+<style>
+.word-translate{
+  display: grid;
+  grid-template-columns: 1fr 3fr 50px;
+  align-items: center;
+}
+
+.header{
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  align-items: center;
+}
+.backB{
+  justify-self: center;
+}
+.addB{
+  display: flex;
+  justify-content:  center;
+}
   </style>

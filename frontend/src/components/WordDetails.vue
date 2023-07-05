@@ -1,12 +1,22 @@
 <template>
     <div>
-      <h2>{{currantlyWord.word}}</h2>
-      <h3>{{currantlyWord.translate}}</h3>
-      <h4>{{currantlyWord.example}}</h4>
+      <div class="header">
+        <router-link class="backB"
+          :to="{name: 'dictionary', params: {name:categoryName}}"
+              ><button >=</button></router-link>
+        <h1>Word details</h1>
+      </div>
+      <div id="word-details">
+      <div id="word-card">
+        <h1 id="word-label">{{currantlyWord.word}}</h1>
+        <h3 id="translate-label">{{currantlyWord.translate}}</h3>
+        <h4 id="example-label">example: {{currantlyWord.example}}</h4>
+      </div>
       <router-link
             :to="{name: 'wordEdit', params: {categoryName: this.categoryName}}"
             ><button>update</button></router-link>
       <button @click="deleteWord()">delete</button>
+      </div>
     </div>
   </template>
   
@@ -60,4 +70,24 @@
   </script>
   
   <style>
+  #word-card{
+    border-width: 4px;
+    border-style: solid;
+    border-color: blueviolet;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+  #example-label{
+    color: gray;
+  }
+  #word-label{
+    font-size: 40px;
+    line-height: 0.4;
+  }
+  #translate-label{
+    line-height: 0.4;
+  }
+  #word-details{
+    margin: 5%;
+  }
   </style>
