@@ -17,9 +17,13 @@
         </div>
         <hr/>
       </div>
-      <router-link class="addB"
-            :to="{name: 'CreateWord', params: {categoryName: this.name}}"
+      <div class="addB">
+      <router-link 
+            :to="{name: 'createWord', params: {categoryName: this.name}}"
             ><button >+</button></router-link>
+      <router-link 
+            :to="{name: 'test', params: {categoryName: this.name}}"
+            ><button >t</button></router-link></div>
     </div>
   </template>
   
@@ -66,20 +70,6 @@
   </script>
   
 <style>
-.word-translate{
-  display: grid;
-  grid-template-columns: 1fr 3fr 50px;
-  align-items: center;
-}
-
-.header{
-  display: grid;
-  grid-template-columns: 50px 1fr;
-  align-items: center;
-}
-.backB{
-  justify-self: center;
-}
 .addB{
   display: flex;
   justify-content:  center;
