@@ -81,17 +81,6 @@
     padding-left: 5%;
     padding-right: 5%;
   }
-  .long-input {
-  width: 100%; 
-  margin-top: 5px;
-  margin-bottom: 5px;
-  padding: 10px;
-  background-color: #f8f8f8;
-  
-}
-.short-input:focus, .long-input:focus {
-  background-color: lightskyblue;
 
-}
 
   </style>

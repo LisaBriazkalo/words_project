@@ -46,7 +46,7 @@ export default{
             newName:null,
             error:null
         }
-    }  ,
+    },
     methods:{
         editName(){
             if(!this.newName){
@@ -98,7 +98,7 @@ export default{
             }
         },
         getCategories(){
-            fetch('http://localhost:8000/',{
+            fetch('http://localhost:8000/get_collections_names',{
                 method:'GET',
                 headers: {"Content-Type":"application/json"}
             })
@@ -116,26 +116,10 @@ export default{
 </script>
   
 <style>
-.category-rename{
-    display: none;
-}
-.category-plate{
-  display: grid;
-  grid-template-columns: 1fr 70px 30px;
-  align-items: center;
-}
-.short-input{
-  
-  padding: 5px;
-  background-color: #f8f8f8;
-}
 #add-new-category{
     display: block;
     margin-top: 5px;
     margin-bottom: 5px;
 }
-.button-delete{
-    padding: 5px;
-    margin: 5px;
-}
+
 </style>
