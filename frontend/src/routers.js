@@ -4,6 +4,7 @@ import Dictionary from './components/Dictionary.vue'
 import WordDetails from './components/WordDetails.vue'
 import CreateWord from './components/CreateWord.vue'
 import WordEdit from './components/WordEdit.vue'
+import Test from './components/Test.vue'
 
 const routes=[
     {
@@ -32,8 +33,14 @@ const routes=[
     },
     {
         path: '/:categoryName/create',
-        name: 'CreateWord',
+        name: 'createWord',
         component: CreateWord,
+        props: true
+    },
+    {
+        path: '/:categoryName/test',
+        name: 'test',
+        component: Test,
         props: true
     }
 ]
