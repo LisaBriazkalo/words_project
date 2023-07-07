@@ -63,7 +63,7 @@
             if(!this.word || !this.translate || !this.example){
                 this.error="Add all fields"
             }else{
-                fetch(`http://localhost:8000/${this.categoryName}/${this.id}/`,{
+                fetch(`http://localhost:8000/update_word/${this.categoryName}/${this.id}/`,{
                 method:'PUT',
                 headers: {"Content-Type":"application/json"},
                 body: JSON.stringify({word: this.word, translate: this.translate, example:this.example})
@@ -81,7 +81,7 @@
     },
     beforeRouteEnter(to, from, next) {
         if(to.params.id!=undefined) {
-            fetch(`http://localhost:8000/${to.params.categoryName}/${to.params.id}`,{
+            fetch(`http://localhost:8000/get_word_details/${to.params.categoryName}/${to.params.id}`,{
               method:'GET',
               headers: {"Content-Type":"application/json"}
           })

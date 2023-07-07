@@ -31,7 +31,7 @@
     },
     methods:{
         getWordData() {
-          fetch(`http://localhost:8000/${this.categoryName}/fourWords/`,{
+          fetch(`http://localhost:8000/fourWords/${this.categoryName}/`,{
               method:'GET',
               headers: {"Content-Type":"application/json"}
           })

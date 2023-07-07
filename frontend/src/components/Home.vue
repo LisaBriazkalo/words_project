@@ -52,7 +52,7 @@ export default{
             if(!this.newName){
                 this.error="Add all fields"
             }else{
-                fetch(`http://localhost:8000/${this.oldName}/`,{
+                fetch(`http://localhost:8000/update_collection_name/${this.oldName}/`,{
                 method:'PUT',
                 headers: {"Content-Type":"application/json"},
                 body: JSON.stringify({name: this.newName})
@@ -72,7 +72,7 @@ export default{
             
         },
         deleteCategory(category) {
-            fetch(`http://localhost:8000/${category}/`,{
+            fetch(`http://localhost:8000/delete_collection/${category}/`,{
               method:'DELETE',
               headers: {"Content-Type":"application/json"}
           })
@@ -85,7 +85,7 @@ export default{
             if(!newCategory){
                 this.error="Add all fields"
             }else{
-                fetch('http://localhost:8000/',{
+                fetch('http://localhost:8000/post_new_category',{
                 method:'POST',
                 headers: {"Content-Type":"application/json"},
                 body: JSON.stringify({name: newCategory})

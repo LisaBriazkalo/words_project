@@ -21,7 +21,7 @@ app.add_middleware(
 async def get():
     return mydb.list_collection_names()
 
-@app.get("/{collection_name}")
+@app.get("/get_words_from_collection/{collection_name}")
 async def getdata(collection_name):
     if not (collection_name in mydb.list_collection_names()):
         return {collection_name :"не існує"}
@@ -29,7 +29,7 @@ async def getdata(collection_name):
     return WordsEntity(collection.find())
         
     
-@app.get("/{collection_name}/{id}")
+@app.get("/get_word_details/{collection_name}/{id}")
 async def getone(collection_name, id):
     if not (collection_name in mydb.list_collection_names()):
         return {collection_name :"не існує"}
@@ -37,7 +37,7 @@ async def getone(collection_name, id):
     return WordEntity(collection.find_one({"_id":ObjectId(id)}))
         
     
-@app.get("/{collection_name}/fourWords/")
+@app.get("/fourWords/{collection_name}")
 async def getone(collection_name):
     if not (collection_name in mydb.list_collection_names()):
         return {collection_name :"не існує"}
@@ -65,13 +65,13 @@ async def getone(collection_name):
     return fourWordsEntity(trueWord, arr)
         
 
-@app.post("/")
+@app.post("/post_new_category")
 async def post(collection_name: Categories):
     mydb.create_collection(str(collection_name.name))
     return mydb.list_collection_names()
 
 
-@app.post("/{collection_name}")
+@app.post("/post_new_word/{collection_name}")
 async def post(collection_name, item: Words):
     if not (collection_name in mydb.list_collection_names()):
         return {collection_name :"не існує"}
@@ -81,17 +81,16 @@ async def post(collection_name, item: Words):
     return WordsEntity(collection.find())
         
 
-@app.put("/{collection_name}")
+@app.put("/update_collection_name/{collection_name}")
 async def update(collection_name, new_collection_name : Categories):
     if not (collection_name in mydb.list_collection_names()):
         return {collection_name :"не існує"}
 
-    collection=mydb.get_collection(collection_name)
     mydb[collection_name].rename(str(new_collection_name.name))
     return mydb.list_collection_names()
             
 
-@app.put("/{collection_name}/{id}")
+@app.put("/update_word/{collection_name}/{id}")
 async def update(collection_name, id, item: Words):
     if not (collection_name in mydb.list_collection_names()):
         return {collection_name :"не існує"}
@@ -101,7 +100,7 @@ async def update(collection_name, id, item: Words):
     return WordEntity(collection.find_one({"_id":ObjectId(id)}))
             
 
-@app.delete("/{collection_name}/{id}")
+@app.delete("/delete_word/{collection_name}/{id}")
 async def delete(collection_name, id):
     if not (collection_name in mydb.list_collection_names()):
         return {collection_name :"не існує"}
@@ -110,7 +109,7 @@ async def delete(collection_name, id):
     return WordEntity(collection.find_one_and_delete({"_id":ObjectId(id)}))
             
     
-@app.delete("/{collection_name}")
+@app.delete("/delete_collection/{collection_name}")
 async def delete(collection_name):
     if not (collection_name in mydb.list_collection_names()):
         return {collection_name :"не існує"}

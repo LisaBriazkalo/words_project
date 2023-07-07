@@ -56,7 +56,7 @@
             if(!this.word || !this.translate || !this.example){
                 this.error="Add all fields"
             }else{
-                fetch(`http://localhost:8000/${this.categoryName}`,{
+                fetch(`http://localhost:8000/post_new_word/${this.categoryName}`,{
                 method:'POST',
                 headers: {"Content-Type":"application/json"},
                 body: JSON.stringify({word: this.word, translate: this.translate, example:this.example})

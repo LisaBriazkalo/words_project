@@ -39,7 +39,7 @@
     },
     methods:{
       deleteWord() {
-        fetch(`http://localhost:8000/${this.categoryName}/${this.id}`,{
+        fetch(`http://localhost:8000/delete_word/${this.categoryName}/${this.id}`,{
               method:'DELETE',
               headers: {"Content-Type":"application/json"}
           })
@@ -52,7 +52,7 @@
           .catch(error=>{console.log(error)})
       },
       getWordData() {
-          fetch(`http://localhost:8000/${this.categoryName}/${this.id}`,{
+          fetch(`http://localhost:8000/get_word_details/${this.categoryName}/${this.id}`,{
               method:'GET',
               headers: {"Content-Type":"application/json"}
           })
