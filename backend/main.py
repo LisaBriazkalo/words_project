@@ -63,7 +63,19 @@ async def getone(collection_name):
             j+=1
         i+=1
     return fourWordsEntity(trueWord, arr)
-        
+
+
+@app.get("/is_true_translate/{collection_name}/{word_value}/{translate_value}")
+async def getdata(collection_name, word_value, translate_value):
+    if not (collection_name in mydb.list_collection_names()):
+        return {collection_name :"не існує"}
+    collection=mydb.get_collection(collection_name)
+    w=collection.find_one({"word": word_value})
+    if (translate_value==w.get("translate")):
+        return True
+    return False
+
+
 
 @app.post("/post_new_category")
 async def post(collection_name: Categories):

@@ -34,7 +34,6 @@ def fourWordsEntity(trueWord, words:list) ->dict:
         i+=1
     return{
         "word": trueWord["word"],
-        "trueTranslate": trueWord["translate"],
         "translate0": arr[0],
         "translate1": arr[1],
         "translate2": arr[2],
