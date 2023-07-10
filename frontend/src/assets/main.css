@@ -54,9 +54,25 @@ background-color: #f8f8f8;
   background-color: #f8f8f8;
 }
 .short-input:focus, .long-input:focus {
-  background-color: lightskyblue;
+  background-color: azure;
 }
 
+button{
+  color: blueviolet;
+  padding: 3px 8px;
+  border-radius: 5px;
+  margin: 3px;
+  border-color: blueviolet;
+  /* background: white; */
+  transition: all 0.2s ease;
+}
+button:hover{
+  color: violet;
+  border-color: violet;
+}
+button:active{
+  transform: scale(0.96);
+}
 
 @media (hover: hover) {
   a:hover {
