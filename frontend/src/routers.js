@@ -5,7 +5,6 @@ import WordDetails from './components/WordDetails.vue'
 import CreateWord from './components/CreateWord.vue'
 import WordEdit from './components/WordEdit.vue'
 import Test from './components/Test.vue'
-import Result from './components/Result.vue'
 
 const routes=[
     {
@@ -42,12 +41,6 @@ const routes=[
         path: '/:categoryName/test',
         name: 'test',
         component: Test,
-        props: true
-    },
-    {
-        path: '/:categoryName/test/result',
-        name: 'result',
-        component: Result,
         props: true
     }
 ]
