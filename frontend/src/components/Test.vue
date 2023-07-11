@@ -6,33 +6,32 @@
               ><button >=</button></router-link>
         <h1>Test task</h1>
       </div> 
-      <h4>{{ numberOfQuestions }}/10</h4>
+      <h4>{{ currantlyIndex+1 }}/10</h4>
       <div id="question">
-        <h2>{{ currantlyWord.word }}</h2>
+        <h2>{{ test[currantlyIndex].word }}</h2>
         <div class="options">
           <button 
-            :id="'answer-option-' + currantlyWord.translate0"
+            id="option1"
             class="default-option"
-            @click="selectOption(currantlyWord.translate0)"
-          >{{ currantlyWord.translate0 }}</button>
+            @click="selectOption('option1', test[currantlyIndex].option1 )"
+          >{{ test[currantlyIndex].option1 }}</button>
           <button 
-            :id="'answer-option-' + currantlyWord.translate1"
-            @click="selectOption(currantlyWord.translate1)"
+            id="option2"
+            @click="selectOption('option2', test[currantlyIndex].option2)"
             class="default-option"
-            >{{ currantlyWord.translate1 }}</button>
+            >{{ test[currantlyIndex].option2 }}</button>
           <button 
-            :id="'answer-option-' + currantlyWord.translate2"
-            @click="selectOption(currantlyWord.translate2)"
+            id="option3"
+            @click="selectOption('option3', test[currantlyIndex].option3)"
             class="default-option"
-            >{{ currantlyWord.translate2 }}</button>
+            >{{ test[currantlyIndex].option3 }}</button>
           <button 
-            :id="'answer-option-' + currantlyWord.translate3"
-            @click="selectOption(currantlyWord.translate3)"
+            id="option4"
+            @click="selectOption('option4', test[currantlyIndex].option4)"
             class="default-option"
-            >{{ currantlyWord.translate3 }}</button>
+            >{{ test[currantlyIndex].option4 }}</button>
           </div>
       </div>
-      <h2>{{ categoryName }}</h2>
       <button @click="nextTest()">next</button>
     </div>
   </template>
@@ -41,10 +40,9 @@
   export default{
     data(){
         return {
-            currantlyWord:{},
-            score: 0,
-            failing:0,
-            numberOfQuestions: 0
+            test:[],
+            currantlyIndex: 0,
+            
         }
     },
     props: {
@@ -54,74 +52,76 @@
       }
     },
     methods:{
-      defaultOptionStyle(){
-        var element = document.getElementById('answer-option-' + this.currantlyWord.translate0);
-          element.style.backgroundColor = 'azure';
-          element = document.getElementById('answer-option-' + this.currantlyWord.translate1);
-          element.style.backgroundColor = 'azure';
-          element = document.getElementById('answer-option-' + this.currantlyWord.translate2);
-          element.style.backgroundColor = 'azure';
-          element = document.getElementById('answer-option-' + this.currantlyWord.translate3);
-          element.style.backgroundColor = 'azure';
-      },
-      dissabledButtons(value){
-        var element = document.getElementById('answer-option-' + this.currantlyWord.translate0);
-          element.disabled=value;
-          element.classList.add('default-option');
-          element = document.getElementById('answer-option-' + this.currantlyWord.translate1);
-          element.disabled=value;
-          element = document.getElementById('answer-option-' + this.currantlyWord.translate2);
-          element.disabled=value;
-          element = document.getElementById('answer-option-' + this.currantlyWord.translate3);
-          element.disabled=value;
+      removeFocus(){
+        const focusedElements = document.querySelectorAll(':focus');
+        focusedElements.forEach(element => {
+          element.blur();
+        });
       },
       nextTest() {
-        if(this.numberOfQuestions!=3){
-          this.getWordData();
-          this.dissabledButtons(false);
-          this.defaultOptionStyle();
-        }
-        else{
-          this.$router.push({
-              name: 'result',
-              params: { categoryName: this.categoryName }
-          });
-          
-        }
-      },
-      selectOption(selected_translate){
-        fetch(`http://localhost:8000/is_true_translate/${this.categoryName}/${this.currantlyWord.word}/${selected_translate}`,{
-              method:'GET',
-              headers: {"Content-Type":"application/json"}
+        if(this.currantlyIndex!=9){
+          fetch(`http://localhost:8000/check_word/${this.categoryName}`,{
+              method:'POST',
+              headers: {"Content-Type":"application/json"},
+              body: JSON.stringify({
+                word: this.test[this.currantlyIndex].word,
+                answer: this.test[this.currantlyIndex].answer,
+                option1: this.test[this.currantlyIndex].option1,
+                option2: this.test[this.currantlyIndex].option2,
+                option3: this.test[this.currantlyIndex].option3,
+                option4: this.test[this.currantlyIndex].option4 
+              })
           })
           .then(resp=>resp.json())
-          .then(data=>{
-              if(data==true){
-                var element = document.getElementById('answer-option-' + selected_translate);
-                element.style.backgroundColor = 'lightgreen';
-                this.score+=1;
-                this.numberOfQuestions+=1;
-              }
-              else{
-                var element = document.getElementById('answer-option-' + selected_translate);
-                element.style.backgroundColor = 'lightpink'; 
-                this.failing+=1;
-                this.numberOfQuestions+=1;   
-              }
-              this.dissabledButtons(true);
-          })
-          .catch(error=>{console.log(error)})
+            .then(data=>{
+              
+              this.removeFocus();
+              
+              console.log(data)
+              // if(data==true){
+                
+              // }
+              // else if(data==false){
+                
+              // }
+              console.log(data)
+            })
+            .catch(error=>{console.log(error)})
 
-          
+          this.currantlyIndex+=1
+        }
+        else {
+          this.getScore()
+        }
       },
-        getWordData() {
-          fetch(`http://localhost:8000/fourWords/${this.categoryName}`,{
+      selectOption(id, selected_translate){
+        this.test[this.currantlyIndex].answer=selected_translate
+        var element = document.getElementById(id)
+        console.log(selected_translate)
+          console.log(id)
+        // this.test[this.currantlyIndex].answer=element;
+        element.focus();
+      },
+      getScore(){
+        fetch(`http://localhost:8000/check_result/${this.categoryName}`,{
+              method:'POST',
+              headers: {"Content-Type":"application/json"},
+              body: JSON.stringify({questions: this.test})
+          })
+          .then(resp=>resp.json())
+            .then(data=>{
+            console.log(data)
+            })
+            .catch(error=>{console.log(error)})
+      },
+      getWordData() {
+          fetch(`http://localhost:8000/getTest/${this.categoryName}`,{
               method:'GET',
               headers: {"Content-Type":"application/json"}
           })
           .then(resp=>resp.json())
           .then(data=>{
-              this.currantlyWord = data
+            this.test.push(...data)
           })
           .catch(error=>{console.log(error)})
       }
@@ -148,5 +148,8 @@
   border-style: solid;
   border-color: blueviolet;
   background-color: azure;
+}
+.default-option:focus{
+  background-color: skyblue;
 }
 </style>
