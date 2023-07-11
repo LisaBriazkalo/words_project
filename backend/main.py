@@ -35,46 +35,20 @@ async def getone(collection_name, id):
         return {collection_name :"не існує"}
     collection=mydb.get_collection(collection_name)
     return WordEntity(collection.find_one({"_id":ObjectId(id)}))
-        
-    
-@app.get("/fourWords/{collection_name}")
+
+
+
+@app.get("/getTest/{collection_name}")
 async def getone(collection_name):
     if not (collection_name in mydb.list_collection_names()):
         return {collection_name :"не існує"}
 
     collection=mydb.get_collection(collection_name)
 
-    size=collection.estimated_document_count()
-    trueWord=random.randint(0, size-1)
-    i=0
-    for document in collection.find():
-        if(i==trueWord):
-            trueWord=document
-            break
-        i+=1
-    
-    arr = random.sample([x for x in range(0, size) if x != i], 3)
-    arr.sort()
-    i=0
-    j=0
-    for document in collection.find():
-        if(j!=3 and i==arr[j]):
-            arr[j]=document
-            j+=1
-        i+=1
-    return fourWordsEntity(trueWord, arr)
-
-
-@app.get("/is_true_translate/{collection_name}/{word_value}/{translate_value}")
-async def getdata(collection_name, word_value, translate_value):
-    if not (collection_name in mydb.list_collection_names()):
-        return {collection_name :"не існує"}
-    collection=mydb.get_collection(collection_name)
-    w=collection.find_one({"word": word_value})
-    if (translate_value==w.get("translate")):
-        return True
-    return False
-
+    arr=[]
+    for i in range(10):
+        arr.append(getFourWordsForTest(i, collection))
+    return arr
 
 
 @app.post("/post_new_category")
@@ -91,7 +65,44 @@ async def post(collection_name, item: Words):
     collection=mydb.get_collection(collection_name)
     collection.insert_one(item.dict())
     return WordsEntity(collection.find())
-        
+
+
+@app.post("/check_result/{collection_name}")
+async def post(collection_name, test: Test):
+    if not (collection_name in mydb.list_collection_names()):
+        return {collection_name :"не існує"}
+    
+    collection=mydb.get_collection(collection_name)
+    score=0
+    faile=0
+    passed=0
+    size=10
+
+    for question in test.questions:
+        if(question.answer==None):
+            passed+=1
+        elif(isRightTranslate(collection, question.word, question.answer)):
+            score+=1
+        elif(isRightTranslate(collection, question.word, question.answer)==False):
+            faile+=1
+    precision=score/size
+    return {
+        "size": size,
+        "score": score,
+        "faile": faile,
+        "passed": passed,
+        "precision": precision
+    }   
+
+
+@app.post("/check_word/{collection_name}")
+async def post(collection_name, question: Question):
+    if not (collection_name in mydb.list_collection_names()):
+        return {collection_name :"не існує"}
+    
+    collection=mydb.get_collection(collection_name)
+    return isRightTranslate(collection, question.word, question.answer)
+
 
 @app.put("/update_collection_name/{collection_name}")
 async def update(collection_name, new_collection_name : Categories):

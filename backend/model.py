@@ -1,3 +1,4 @@
+from typing import Union
 from pydantic import BaseModel
 import random
 
@@ -7,7 +8,18 @@ class Categories(BaseModel):
 class Words(BaseModel): 
     word : str
     translate : str
-    example : str      
+    example : str   
+
+class Question(BaseModel): 
+    word: str
+    answer: Union[str, None]
+    option1: str
+    option2: str
+    option3: str
+    option4: str    
+
+class Test(BaseModel):
+    questions: list[Question]
 
 def WordEntity(word) -> dict:
     return{
@@ -20,7 +32,7 @@ def WordEntity(word) -> dict:
 def WordsEntity(entity) -> list:
     return[WordEntity(item) for item in entity]
 
-def fourWordsEntity(trueWord, words:list) ->dict:
+def fourWordsEntity(index, trueWord, words:list) ->dict:
     arr = random.sample(range(0, 4), 4)
     for i in range(4):
         if(arr[i]==0):
@@ -34,8 +46,37 @@ def fourWordsEntity(trueWord, words:list) ->dict:
         i+=1
     return{
         "word": trueWord["word"],
-        "translate0": arr[0],
-        "translate1": arr[1],
-        "translate2": arr[2],
-        "translate3": arr[3]
+        "answer": None,
+        "option1": arr[0],
+        "option2": arr[1],
+        "option3": arr[2],
+        "option4": arr[3]
     }
+
+
+def getFourWordsForTest(index, collection):
+    size=collection.estimated_document_count()
+    trueWord=random.randint(0, size-1)
+    i=0
+    for document in collection.find():
+        if(i==trueWord):
+            trueWord=document
+            break
+        i+=1
+    
+    arr = random.sample([x for x in range(0, size) if x != i], 3)
+    arr.sort()
+    i=0
+    j=0
+    for document in collection.find():
+        if(j!=3 and i==arr[j]):
+            arr[j]=document
+            j+=1
+        i+=1
+    return fourWordsEntity(index, trueWord, arr)
+
+def isRightTranslate(collection, word_value, translate_value):
+    w=collection.find_one({"word": word_value})
+    if (translate_value==w.get("translate")):
+        return True
+    return False
