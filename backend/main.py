@@ -48,7 +48,7 @@ async def getone(collection_name, id):
 
     first_document = next(collection.find())
     cursor = collection.find()
-    
+
     for document in cursor:
         if(document==collection.find_one({"_id":ObjectId(id)})):
             next_document=next(cursor, None)
@@ -84,7 +84,7 @@ async def getone(collection_name, id):
                 return WordEntity(document)
       
 
-@app.get("/getTest/{collection_name}")
+@app.get("/getTest_word_translate/{collection_name}")
 async def getone(collection_name):
     if not (collection_name in mydb.list_collection_names()):
         return {collection_name :"не існує"}
@@ -93,7 +93,20 @@ async def getone(collection_name):
 
     arr=[]
     for i in range(10):
-        arr.append(getFourWordsForTest(i, collection))
+        arr.append(getFourWordsForTest("Word_Translate", collection))
+    return arr
+
+
+@app.get("/getTest_translate_word/{collection_name}")
+async def getone(collection_name):
+    if not (collection_name in mydb.list_collection_names()):
+        return {collection_name :"не існує"}
+
+    collection=mydb.get_collection(collection_name)
+
+    arr=[]
+    for i in range(10):
+        arr.append(getFourWordsForTest("Translate_Word", collection))
     return arr
 
 
