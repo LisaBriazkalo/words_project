@@ -2,7 +2,8 @@
     <div>
         <div class="header">
         <router-link class="backB"
-          :to="{name: 'dictionary', params: {name:categoryName}}"
+          :to="{name:'wordDetails',
+                params: { categoryName: this.categoryName, id: this.id}}"
               ><button >=</button></router-link>
         <h1>Edit the word</h1>
       </div>
@@ -71,8 +72,8 @@
             .then(resp=>resp.json())
             .then(()=>{
                 this.$router.push({
-                    name:'dictionary',
-                    params: { name: this.categoryName }
+                  name:'wordDetails',
+                  params: { categoryName: this.categoryName, id: this.id}
                 })
             })
             .catch(error=>{console.log(error)})
