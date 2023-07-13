@@ -37,6 +37,52 @@ async def getone(collection_name, id):
     return WordEntity(collection.find_one({"_id":ObjectId(id)}))
 
 
+@app.get("/get_next_word/{collection_name}/{id}")
+async def getone(collection_name, id):
+    if not (collection_name in mydb.list_collection_names()):
+        return {collection_name :"не існує"}
+    collection=mydb.get_collection(collection_name)
+
+    if(collection.find_one({"_id":ObjectId(id)}) is None):
+        return{"id error"}
+
+    first_document = next(collection.find())
+    cursor = collection.find()
+    
+    for document in cursor:
+        if(document==collection.find_one({"_id":ObjectId(id)})):
+            next_document=next(cursor, None)
+            if(next_document is not None):
+                return WordEntity(next_document)
+            else: 
+                return WordEntity(first_document)
+
+
+@app.get("/get_previous_word/{collection_name}/{id}")
+async def getone(collection_name, id):
+    if not (collection_name in mydb.list_collection_names()):
+        return {collection_name :"не існує"}
+    collection=mydb.get_collection(collection_name)
+    
+    if(collection.find_one({"_id":ObjectId(id)}) is None):
+        return{"id error"}
+
+    first_document = next(collection.find())
+    cursor = collection.find()
+    cursor2 = collection.find()
+    
+    for i in cursor:
+        for document in cursor2:
+            next_document=next(cursor, None)
+            if(next_document==collection.find_one({"_id":ObjectId(id)})):
+                print(next_document)
+                print()
+                return WordEntity(document)
+            if(next_document is None and first_document==collection.find_one({"_id":ObjectId(id)})):
+                print(next_document)
+                print(collection.find_one({"_id":ObjectId(id)}))
+                return WordEntity(document)
+      
 
 @app.get("/getTest/{collection_name}")
 async def getone(collection_name):
