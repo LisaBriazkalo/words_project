@@ -7,36 +7,39 @@
         <h1>Test task</h1>
       </div> 
       <div id="question">
-      <h4>{{ currantlyIndex+1 }}/10</h4>
-      <div id="wordAndOptions">
-        <h2>{{ test[currantlyIndex].word }}</h2>
-        <div class="options">
-          <button 
-            id="option1"
-            :class="{'defaultB': option1_x===0, 'trueAnswer': option1_x===true, 'falseAnswer': option1_x===false}"
-            @click="selectOption('option1', test[currantlyIndex].option1 )"
-          >{{ test[currantlyIndex].option1 }}</button>
-          <button 
-            id="option2"
-            @click="selectOption('option2', test[currantlyIndex].option2)"
-            :class="{'defaultB': option2_x===0, 'trueAnswer': option2_x===true, 'falseAnswer': option2_x===false}"
-            >{{ test[currantlyIndex].option2 }}</button>
-          <button 
-            id="option3"
-            @click="selectOption('option3', test[currantlyIndex].option3)"
-            :class="{'defaultB': option3_x===0, 'trueAnswer': option3_x===true, 'falseAnswer': option3_x===false}"
-            >{{ test[currantlyIndex].option3 }}</button>
-          <button 
-            id="option4"
-            @click="selectOption('option4', test[currantlyIndex].option4)"
-            :class="{'defaultB': option4_x===0, 'trueAnswer': option4_x===true, 'falseAnswer': option4_x===false}"
-            >{{ test[currantlyIndex].option4 }}</button>
-          </div>
-      </div>
-      <button 
-        id="next"
-        @click="nextTest()"
-        >next</button>
+        <div id="statusBar">
+          <h4>{{ currantlyIndex+1 }}/10</h4>
+          <button id="reverse-button" @click="reverse()">⮀</button>
+        </div>
+        <div id="wordAndOptions">
+          <h2>{{ test[currantlyIndex].word }}</h2>
+          <div class="options">
+            <button 
+              id="option1"
+              :class="{'defaultB': option1_x===0, 'trueAnswer': option1_x===true, 'falseAnswer': option1_x===false}"
+              @click="selectOption('option1', test[currantlyIndex].option1 )"
+            >{{ test[currantlyIndex].option1 }}</button>
+            <button 
+              id="option2"
+              @click="selectOption('option2', test[currantlyIndex].option2)"
+              :class="{'defaultB': option2_x===0, 'trueAnswer': option2_x===true, 'falseAnswer': option2_x===false}"
+              >{{ test[currantlyIndex].option2 }}</button>
+            <button 
+              id="option3"
+              @click="selectOption('option3', test[currantlyIndex].option3)"
+              :class="{'defaultB': option3_x===0, 'trueAnswer': option3_x===true, 'falseAnswer': option3_x===false}"
+              >{{ test[currantlyIndex].option3 }}</button>
+            <button 
+              id="option4"
+              @click="selectOption('option4', test[currantlyIndex].option4)"
+              :class="{'defaultB': option4_x===0, 'trueAnswer': option4_x===true, 'falseAnswer': option4_x===false}"
+              >{{ test[currantlyIndex].option4 }}</button>
+            </div>
+        </div>
+        <button 
+          id="next"
+          @click="nextTest()"
+          >next</button>
       </div>
         <div id="results">
           <h2>Правильні відповіді: {{ results.score }}/{{ results.size }}</h2>
@@ -51,6 +54,7 @@
   export default{
     data(){
         return {
+            testType: 'Translate_Word',
             test:[],
             currantlyIndex: 0,
             results:{},
@@ -67,6 +71,17 @@
       }
     },
     methods:{
+      reverse(){
+        this.currantlyIndex=0
+        if(this.testType=='Word_Translate'){
+          this.testType = 'Translate_Word'
+        }
+        else this.testType='Word_Translate'
+        for(var i=0; i<10;i++)
+          this.test.pop()
+        this.getWordData()
+        console.log(this.test)
+      },
       disabledAllButtons(value){
         var element = document.getElementById('option1')
         element.disabled = value;
@@ -152,8 +167,13 @@
             .catch(error=>{console.log(error)})
       },
       getWordData() {
-        
-          fetch(`http://localhost:8000/getTest/${this.categoryName}`,{
+          var url=`http://localhost:8000/getTest_word_translate/${this.categoryName}`
+          if(this.testType=='Translate_Word'){
+            url=`http://localhost:8000/getTest_translate_word/${this.categoryName}`
+          }
+          
+          fetch(url
+          ,{
               method:'GET',
               headers: {"Content-Type":"application/json"}
           })
@@ -202,13 +222,21 @@
   background-color: pink;
   font-size: 15px;
 }
-#next:disabled{
+/* #next:disabled{
   border-color: gray;
   color: gray;
   background-color: whitesmoke;
+} */
+
+#statusBar{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: start;
+  align-items: center;
 }
-
-
+#reverse-button{
+  justify-self: end;
+}
 #results{
   display: none;
 }
