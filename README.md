@@ -1,11 +1,11 @@
 # words_project
 
 ## Backend
-pipenv sync
-pipenv run uvicorn main:app --reload
+1. pipenv sync
+2. pipenv run uvicorn main:app --reload
 
-cd inventory && bash build.sh
+3. cd inventory && bash build.sh
 
 ## Frontend
-npm ci
-npm run dev
+1. npm ci
+2. npm run dev
